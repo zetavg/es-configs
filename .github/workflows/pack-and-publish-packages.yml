@@ -60,7 +60,7 @@ jobs:
       - name: Setup registry
         if: ${{ env.NPM_REGISTRY_SERVER != '' || env.NPM_AUTH_TOKEN != '' }}
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || (matrix.environment == 'GitHub Packages' && secrets.GITHUB_TOKEN) || '' }}
           ENVIRONMENT: ${{ matrix.environment }}
           NPM_REGISTRY_SERVER: ${{ vars.NPM_REGISTRY_SERVER }}
         run: |
@@ -76,7 +76,7 @@ jobs:
           echo "${NPM_REGISTRY_SERVER}" | sed -e 's#http[s]*://##' -e 's#/$##' -e 's#^#//#' -e 's#$#/:_authToken=\${NPM_AUTH_TOKEN}#' > .npmrc
       - name: Publish packages
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || (matrix.environment == 'GitHub Packages' && secrets.GITHUB_TOKEN) || '' }}
         run: |
           npm install -g npm@latest
           npm --version
