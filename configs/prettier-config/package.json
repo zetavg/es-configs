@@ -1,0 +1,19 @@
+{
+  "name": "@zetavg/prettier-config",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pack-package": "yarn pack",
+    "publish-packed-package": "npm publish package.tgz --access public",
+    "clean": "rm -rf package.tgz"
+  },
+  "peerDependencies": {
+    "prettier": "^3"
+  },
+  "devDependencies": {
+    "@zetavg/eslint-config": "workspace:^",
+    "eslint": "^9",
+    "prettier": "^3"
+  }
+}
