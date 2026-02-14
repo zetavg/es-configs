@@ -19,7 +19,12 @@ runs:
         node-version-file: '.node-version'
     - name: Enable Corepack
       shell: bash
-      run: corepack enable
+      run: |
+        corepack enable
+    - name: Set node_modules cache path
+      shell: bash
+      run: |
+        echo "node_modules_cache_path=**/node_modules" >> "$GITHUB_ENV"
     - name: Restore cached node_modules
       id: restore-node-modules-cache
       if: ${{ inputs.skip-yarn-install != 'true' }}
@@ -27,7 +32,7 @@ runs:
       env:
         cache-name: node_modules
       with:
-        path: &node-modules-cache-path '**/node_modules'
+        path: ${{ env.node_modules_cache_path }}
         key: ${{ runner.os }}-${{ env.cache-name }}${{ inputs.yarn-workspaces-focus && format('-{0}', inputs.yarn-workspaces-focus) || '' }}-${{ hashFiles('yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-${{ env.cache-name }}${{ inputs.yarn-workspaces-focus && format('-{0}', inputs.yarn-workspaces-focus) || '' }}-
@@ -40,7 +45,7 @@ runs:
       if: ${{ inputs.skip-yarn-install != 'true' }}
       uses: actions/cache/save@v5
       with:
-        path: *node-modules-cache-path
+        path: ${{ env.node_modules_cache_path }}
         key: ${{ steps.restore-node-modules-cache.outputs.cache-primary-key }}
     - name: Build
       if: ${{ inputs.skip-build != 'true' && inputs.skip-yarn-install != 'true' }}
