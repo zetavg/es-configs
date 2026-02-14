@@ -1,0 +1,16 @@
+{
+  "name": "@zetavg/tsconfig",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetavg/es-configs",
+    "directory": "configs/tsconfig"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "scripts": {
+    "pack-package": "yarn pack",
+    "publish-packed-package": "npm publish package.tgz --access public",
+    "clean": "rm -rf package.tgz"
+  }
+}

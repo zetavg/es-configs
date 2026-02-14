@@ -1,0 +1,54 @@
+name: Setup
+description: Setup the project.
+inputs:
+  yarn-workspaces-focus:
+    description: Focus on a specific Yarn workspace when installing dependencies and building.
+    required: false
+  skip-yarn-install:
+    description: Skip installing dependencies with Yarn if set to `true` - note that this will also skip building the project.
+    required: false
+  skip-build:
+    description: Skip building the project if set to `true`.
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.node-version'
+    - name: Enable Corepack
+      shell: bash
+      run: |
+        corepack enable
+    - name: Set node_modules cache path
+      shell: bash
+      run: |
+        echo "node_modules_cache_path=**/node_modules" >> "$GITHUB_ENV"
+    - name: Restore cached node_modules
+      id: restore-node-modules-cache
+      if: ${{ inputs.skip-yarn-install != 'true' }}
+      uses: actions/cache/restore@v5
+      env:
+        cache-name: node_modules
+      with:
+        path: ${{ env.node_modules_cache_path }}
+        key: ${{ runner.os }}-${{ env.cache-name }}${{ inputs.yarn-workspaces-focus && format('-{0}', inputs.yarn-workspaces-focus) || '' }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ env.cache-name }}${{ inputs.yarn-workspaces-focus && format('-{0}', inputs.yarn-workspaces-focus) || '' }}-
+    - name: Install dependencies
+      if: ${{ inputs.skip-yarn-install != 'true' }}
+      shell: bash
+      run: |
+        ${{ inputs.yarn-workspaces-focus && format('yarn workspaces focus {0}', inputs.yarn-workspaces-focus) || 'yarn install'}}
+    - name: Save node_modules cache
+      if: ${{ inputs.skip-yarn-install != 'true' && steps.restore-node-modules-cache.outputs.cache-hit != 'true' }}
+      uses: actions/cache/save@v5
+      with:
+        path: ${{ env.node_modules_cache_path }}
+        key: ${{ steps.restore-node-modules-cache.outputs.cache-primary-key }}
+    - name: Build
+      if: ${{ inputs.skip-build != 'true' && inputs.skip-yarn-install != 'true' }}
+      shell: bash
+      run: |
+        ${{ inputs.yarn-workspaces-focus && format('yarn build-focus {0}', inputs.yarn-workspaces-focus) || 'yarn build'}}

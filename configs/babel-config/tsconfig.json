@@ -1,0 +1,10 @@
+{
+  "extends": "@zetavg/tsconfig",
+  "include": ["**/*.js"],
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "outDir": "dist/types",
+    "emitDeclarationOnly": true
+  }
+}

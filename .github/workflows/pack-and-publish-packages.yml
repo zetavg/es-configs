@@ -1,0 +1,39 @@
+name: Pack and Publish Packages
+run-name: Pack and Publish ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.version }}
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version, e.g. `1.0.0` or `1.2.3-pre1`'
+        type: string
+        required: true
+  # Remove this if the workflow of this project is not `Publish release on GitHub → Build and publish packages` but something like, for example, `Push tag → Run tests → Build → Publish packages and create release on GitHub in parallel`.
+  release:
+    types: [published]
+
+permissions:
+  packages: write
+  # Required for NPM trusted publishing. See: https://docs.npmjs.com/trusted-publishers.
+  id-token: write
+
+jobs:
+  test:
+    name: Run Checks
+    uses: ./.github/workflows/checks.yml
+
+  pack:
+    name: Pack Packages
+    uses: ./.github/workflows/pack-packages.yml
+    with:
+      version: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.version }}
+
+  publish:
+    name: Publish Packages
+    needs:
+      - test
+      - pack
+    uses: ./.github/workflows/publish-packages.yml
+    with:
+      version: ${{ needs.pack.outputs.version }}
+      packed-packages-artifact-name: ${{ needs.pack.outputs.packed-packages-artifact-name }}
+    secrets: inherit

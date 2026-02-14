@@ -1,0 +1,72 @@
+name: Pack Packages
+run-name: ${{ inputs.version && format('Pack Packages - {0}', inputs.version) || 'Pack Packages' }}
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: 'Sets the version of packages before packing. Example: `v1.0.0` or `1.2.3-pre1`.'
+    outputs:
+      version:
+        description: 'The release version of the packed packages.'
+        value: ${{ jobs.pack.outputs.version }}
+      packed-packages-artifact-name:
+        description: 'The name of the artifact containing the packed packages, e.g. `packed-packages`.'
+        value: ${{ jobs.pack.outputs.packed-packages-artifact-name }}
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: 'Sets the version of packages before packing. Example: `v1.0.0` or `1.2.3-pre1`.'
+
+jobs:
+  pack:
+    name: Pack Packages
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.prepare-version.outputs.version }}
+      packed-packages-artifact-name: ${{ steps.upload-packed-packages.outputs.artifact-name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Prepare packages version
+        id: prepare-version
+        run: |
+          version_string="${{ inputs.version || '0.0.0' }}"
+          version="${version_string/#v/}"
+          echo "Version: ${version}"
+          echo "version=${version}" >> $GITHUB_OUTPUT
+      - name: Set packages version
+        run: yarn set-version '${{ steps.prepare-version.outputs.version }}'
+      - name: Pack packages
+        run: |
+          yarn pack-packages
+      - name: Upload packed packages
+        id: upload-packed-packages
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: packed-packages
+          path: |
+            **/package.json
+            **/*.tgz
+            **/README.md
+            .yarnrc.yml
+            yarn.lock
+            !**/node_modules

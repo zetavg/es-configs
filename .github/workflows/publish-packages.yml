@@ -1,0 +1,79 @@
+name: Publish Packages
+run-name: Pack and Publish ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.version }}
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version, e.g. `1.0.0` or `1.2.3-pre1`'
+        type: string
+        required: true
+      packed-packages-artifact-name:
+        description: 'The name of the artifact containing the packed packages, e.g. `packed-packages`.'
+        type: string
+        required: true
+
+permissions:
+  packages: write
+  # Required for NPM trusted publishing. See: https://docs.npmjs.com/trusted-publishers.
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish Packages to ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - NPM
+          - GitHub Packages
+    environment:
+      name: ${{ matrix.environment }}
+      url: ${{ vars.URL }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            .github
+            .yarn
+      - name: Download built packages
+        uses: actions/download-artifact@v4.1.2
+        with:
+          name: packed-packages
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          skip-build: true
+      - name: Update npm
+        run: |
+          npm install -g npm@latest # Note that trusted publishing (https://docs.npmjs.com/trusted-publishers) requires npm CLI version 11.5.1 or later and Node version 22.14.0 or higher.
+          npm --version
+      - name: Setup registry
+        # The following environment variables and secrets are required if not publishing to GitHub Packages or NPM with trusted publishing (https://docs.npmjs.com/trusted-publishers):
+        # * `vars.NPM_REGISTRY_SERVER` - The registry server URL, e.g. `https://registry.npmjs.org`.
+        # * `secrets.NPM_AUTH_TOKEN` - The authentication token for the registry server.
+        if: ${{ env.NPM_REGISTRY_SERVER != '' || env.NPM_AUTH_TOKEN != '' }}
+        env:
+          ENVIRONMENT: ${{ matrix.environment }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || (matrix.environment == 'GitHub Packages' && secrets.GITHUB_TOKEN) || '' }}
+          NPM_REGISTRY_SERVER: ${{ vars.NPM_REGISTRY_SERVER  || (matrix.environment == 'GitHub Packages' && 'https://npm.pkg.github.com') || '' }}
+        run: |
+          if [ -z "$NPM_REGISTRY_SERVER" ]; then
+            echo "[ERROR] The environment variable \`NPM_REGISTRY_SERVER\` is not set on environment \"$ENVIRONMENT\". Please check the settings on your GitHub repostory." >&2
+            exit 1
+          fi
+          npm config set registry "$NPM_REGISTRY_SERVER"
+          echo "NPM Registry: $(npm config get registry)"
+
+          if [ -z "$NPM_AUTH_TOKEN" ] && [[ "$NPM_REGISTRY_SERVER" != *pkg.github.com* ]]; then
+            echo "[ERROR] The environment variable \`NPM_AUTH_TOKEN\` is not set on environment \"$ENVIRONMENT\". Please check the settings on your GitHub repository." >&2
+            exit 1
+          fi
+          echo "${NPM_REGISTRY_SERVER}" | sed -e 's#http[s]*://##' -e 's#/$##' -e 's#^#//#' -e 's#$#/:_authToken=\${NPM_AUTH_TOKEN}#' > .npmrc
+      - name: Publish packages
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || (matrix.environment == 'GitHub Packages' && secrets.GITHUB_TOKEN) || '' }}
+        run: |
+          yarn publish-packed-packages --tag ${{ contains(inputs.version, '-') && 'next' || 'latest' }}

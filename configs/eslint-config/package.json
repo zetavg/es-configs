@@ -1,0 +1,55 @@
+{
+  "name": "@zetavg/eslint-config",
+  "type": "module",
+  "main": "index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetavg/es-configs",
+    "directory": "configs/eslint-config"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "build:types": "tsc",
+    "build": "yarn build:types",
+    "watch:types": "yarn build:types --watch --preserveWatchOutput",
+    "watch": "yarn watch:types",
+    "pack-package": "yarn pack",
+    "publish-packed-package": "npm publish package.tgz --access public",
+    "clean": "rm -rf package.tgz"
+  },
+  "peerDependencies": {
+    "eslint": "^9",
+    "prettier": "^3",
+    "typescript": "~5.8"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@eslint/js": "^9",
+    "@eslint/json": "^0.12",
+    "@eslint/markdown": "^6",
+    "@types/eslint": "^9",
+    "@vitest/eslint-plugin": "^1",
+    "eslint-config-prettier": ">= 7.0.0 <10.0.0 || >=10.1.0",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-prettier": "^5",
+    "eslint-plugin-react": "^7",
+    "eslint-plugin-react-hooks": "^5",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-simple-import-sort": "^12",
+    "eslint-plugin-unicorn": "^59",
+    "globals": "^16",
+    "typescript-eslint": "^8"
+  },
+  "devDependencies": {
+    "@zetavg/prettier-config": "workspace:^",
+    "@zetavg/tsconfig": "workspace:^",
+    "eslint": "^9",
+    "prettier": "^3",
+    "typescript": "~5.8"
+  }
+}

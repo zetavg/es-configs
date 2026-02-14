@@ -1,0 +1,24 @@
+{
+  "name": "@zetavg/prettier-config",
+  "type": "module",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetavg/es-configs",
+    "directory": "configs/prettier-config"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pack-package": "yarn pack",
+    "publish-packed-package": "npm publish package.tgz --access public",
+    "clean": "rm -rf package.tgz"
+  },
+  "peerDependencies": {
+    "prettier": "^3"
+  },
+  "devDependencies": {
+    "@zetavg/eslint-config": "workspace:^",
+    "eslint": "^9",
+    "prettier": "^3"
+  }
+}
