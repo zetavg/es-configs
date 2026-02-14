@@ -58,6 +58,7 @@ jobs:
         with:
           skip-build: true
       - name: Setup registry
+        if: ${{ env.NPM_REGISTRY_SERVER != '' || env.NPM_AUTH_TOKEN != '' }}
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || secrets.GITHUB_TOKEN }}
           ENVIRONMENT: ${{ matrix.environment }}
