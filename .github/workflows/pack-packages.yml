@@ -18,6 +18,10 @@ on:
         required: true
         type: string
         description: 'Sets the version of packages before packing. Example: `v1.0.0` or `1.2.3-pre1`.'
+    outputs:
+      version:
+        description: 'The release version of the packed packages.'
+        value: ${{ jobs.pack.outputs.version }}
   workflow_dispatch:
     inputs:
       version:
@@ -29,6 +33,8 @@ jobs:
   pack:
     name: Pack Packages
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.prepare-version.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
