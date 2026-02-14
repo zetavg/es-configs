@@ -57,6 +57,10 @@ jobs:
         uses: ./.github/actions/setup
         with:
           skip-build: true
+      - name: Update npm
+        run: |
+          npm install -g npm@latest # Note that trusted publishing (https://docs.npmjs.com/trusted-publishers) requires npm CLI version 11.5.1 or later and Node version 22.14.0 or higher.
+          npm --version
       - name: Setup registry
         if: ${{ env.NPM_REGISTRY_SERVER != '' || env.NPM_AUTH_TOKEN != '' }}
         env:
@@ -80,6 +84,4 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || (matrix.environment == 'GitHub Packages' && secrets.GITHUB_TOKEN) || '' }}
         run: |
-          npm install -g npm@latest # Note that trusted publishing (https://docs.npmjs.com/trusted-publishers) requires npm CLI version 11.5.1 or later and Node version 22.14.0 or higher.
-          npm --version
           yarn publish-packed-packages --tag ${{ contains(needs.pack.outputs.version, '-') && 'next' || 'latest' }}
