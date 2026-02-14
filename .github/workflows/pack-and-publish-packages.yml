@@ -65,7 +65,7 @@ jobs:
           NPM_REGISTRY_SERVER: ${{ vars.NPM_REGISTRY_SERVER }}
         run: |
           if [ -z "$NPM_REGISTRY_SERVER" ]; then
-            echo "[ERROR] The environment variable `NPM_REGISTRY_SERVER` is not set on environment \"$ENVIRONMENT\". Please check the settings on your GitHub repostory." >&2
+            echo "[ERROR] The environment variable \`NPM_REGISTRY_SERVER\` is not set on environment \"$ENVIRONMENT\". Please check the settings on your GitHub repostory." >&2
           fi
           npm config set registry "$NPM_REGISTRY_SERVER"
           echo "NPM Registry: $(npm config get registry)"
