@@ -78,4 +78,5 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
+          npm --version
           yarn publish-packed-packages --tag ${{ contains(steps.get-release-version.outputs.version, '-') && 'next' || 'latest' }}
