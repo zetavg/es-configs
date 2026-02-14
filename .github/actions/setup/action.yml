@@ -20,22 +20,28 @@ runs:
     - name: Enable Corepack
       shell: bash
       run: corepack enable
-    - name: Cache node_modules
+    - name: Restore cached node_modules
+      id: restore-node-modules-cache
       if: ${{ inputs.skip-yarn-install != 'true' }}
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v5
       env:
         cache-name: node_modules
       with:
-        path: '**/node_modules'
+        path: &node-modules-cache-path '**/node_modules'
         key: ${{ runner.os }}-${{ env.cache-name }}${{ inputs.yarn-workspaces-focus && format('-{0}', inputs.yarn-workspaces-focus) || '' }}-${{ hashFiles('yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-${{ env.cache-name }}${{ inputs.yarn-workspaces-focus && format('-{0}', inputs.yarn-workspaces-focus) || '' }}-
-        save-always: true
     - name: Install dependencies
       if: ${{ inputs.skip-yarn-install != 'true' }}
       shell: bash
       run: |
         ${{ inputs.yarn-workspaces-focus && format('yarn workspaces focus {0}', inputs.yarn-workspaces-focus) || 'yarn install'}}
+    - name: Save node_modules cache
+      if: ${{ inputs.skip-yarn-install != 'true' }}
+      uses: actions/cache/save@v5
+      with:
+        path: *node-modules-cache-path
+        key: ${{ steps.restore-node-modules-cache.outputs.cache-primary-key }}
     - name: Build
       if: ${{ inputs.skip-build != 'true' && inputs.skip-yarn-install != 'true' }}
       shell: bash
