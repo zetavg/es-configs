@@ -42,7 +42,7 @@ runs:
       run: |
         ${{ inputs.yarn-workspaces-focus && format('yarn workspaces focus {0}', inputs.yarn-workspaces-focus) || 'yarn install'}}
     - name: Save node_modules cache
-      if: ${{ inputs.skip-yarn-install != 'true' }}
+      if: ${{ inputs.skip-yarn-install != 'true' && steps.restore-node-modules-cache.outputs.cache-hit != 'true' }}
       uses: actions/cache/save@v5
       with:
         path: ${{ env.node_modules_cache_path }}
