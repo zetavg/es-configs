@@ -56,7 +56,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          skip-yarn-install: true
           skip-build: true
       - name: Setup registry
         env:
