@@ -60,18 +60,20 @@ jobs:
       - name: Setup registry
         if: ${{ env.NPM_REGISTRY_SERVER != '' || env.NPM_AUTH_TOKEN != '' }}
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || (matrix.environment == 'GitHub Packages' && secrets.GITHUB_TOKEN) || '' }}
           ENVIRONMENT: ${{ matrix.environment }}
-          NPM_REGISTRY_SERVER: ${{ vars.NPM_REGISTRY_SERVER }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN || (matrix.environment == 'GitHub Packages' && secrets.GITHUB_TOKEN) || '' }}
+          NPM_REGISTRY_SERVER: ${{ vars.NPM_REGISTRY_SERVER  || (matrix.environment == 'GitHub Packages' && 'https://npm.pkg.github.com') || '' }}
         run: |
           if [ -z "$NPM_REGISTRY_SERVER" ]; then
             echo "[ERROR] The environment variable \`NPM_REGISTRY_SERVER\` is not set on environment \"$ENVIRONMENT\". Please check the settings on your GitHub repostory." >&2
+            exit 1
           fi
           npm config set registry "$NPM_REGISTRY_SERVER"
           echo "NPM Registry: $(npm config get registry)"
 
           if [ -z "$NPM_AUTH_TOKEN" ] && [[ "$NPM_REGISTRY_SERVER" != *pkg.github.com* ]]; then
             echo "[ERROR] The environment variable \`NPM_AUTH_TOKEN\` is not set on environment \"$ENVIRONMENT\". Please check the settings on your GitHub repository." >&2
+            exit 1
           fi
           echo "${NPM_REGISTRY_SERVER}" | sed -e 's#http[s]*://##' -e 's#/$##' -e 's#^#//#' -e 's#$#/:_authToken=\${NPM_AUTH_TOKEN}#' > .npmrc
       - name: Publish packages
