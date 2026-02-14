@@ -5,6 +5,11 @@
   "bin": {
     "babel-config-default-extensions": "bin/babel-config-default-extensions.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetavg/es-configs",
+    "directory": "configs/babel-config"
+  },
   "scripts": {
     "lint": "eslint .",
     "build:types": "tsc",

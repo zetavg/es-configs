@@ -2,6 +2,11 @@
   "name": "@zetavg/prettier-config",
   "type": "module",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetavg/es-configs",
+    "directory": "configs/prettier-config"
+  },
   "scripts": {
     "lint": "eslint .",
     "pack-package": "yarn pack",

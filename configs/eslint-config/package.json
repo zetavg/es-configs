@@ -3,6 +3,11 @@
   "type": "module",
   "main": "index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetavg/es-configs",
+    "directory": "configs/eslint-config"
+  },
   "scripts": {
     "lint": "eslint .",
     "build:types": "tsc",

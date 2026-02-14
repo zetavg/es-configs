@@ -1,5 +1,10 @@
 {
   "name": "@zetavg/tsconfig",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetavg/es-configs",
+    "directory": "configs/tsconfig"
+  },
   "peerDependencies": {
     "typescript": "^5"
   },
