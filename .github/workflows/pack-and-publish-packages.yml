@@ -12,6 +12,8 @@ on:
 
 permissions:
   packages: write
+  # Required for NPM trusted publishing. See: https://docs.npmjs.com/trusted-publishers.
+  id-token: write
 
 jobs:
   test:
