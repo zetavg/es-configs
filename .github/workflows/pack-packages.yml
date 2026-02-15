@@ -22,6 +22,9 @@ on:
       version:
         description: 'The release version of the packed packages.'
         value: ${{ jobs.pack.outputs.version }}
+      packed-packages-artifact-name:
+        description: 'The name of the artifact containing the packed packages, e.g. `packed-packages`.'
+        value: ${{ jobs.pack.outputs.packed-packages-artifact-name }}
   workflow_dispatch:
     inputs:
       version:
@@ -35,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.prepare-version.outputs.version }}
+      packed-packages-artifact-name: ${{ steps.upload-packed-packages.outputs.artifact-name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,6 +59,7 @@ jobs:
         run: |
           yarn pack-packages
       - name: Upload packed packages
+        id: upload-packed-packages
         uses: actions/upload-artifact@v4.3.1
         with:
           name: packed-packages
