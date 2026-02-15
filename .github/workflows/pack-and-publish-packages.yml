@@ -1,14 +1,15 @@
 name: Pack and Publish Packages
 run-name: Pack and Publish ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.version }}
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       version:
         description: 'Version, e.g. `1.0.0` or `1.2.3-pre1`'
         type: string
         required: true
+  # Remove this if the workflow of this project is not `Publish release on GitHub → Build and publish packages` but something like, for example, `Push tag → Run tests → Build → Publish packages and create release on GitHub in parallel`.
+  release:
+    types: [published]
 
 permissions:
   packages: write
@@ -62,6 +63,9 @@ jobs:
           npm install -g npm@latest # Note that trusted publishing (https://docs.npmjs.com/trusted-publishers) requires npm CLI version 11.5.1 or later and Node version 22.14.0 or higher.
           npm --version
       - name: Setup registry
+        # The following environment variables and secrets are required if not publishing to GitHub Packages or NPM with trusted publishing (https://docs.npmjs.com/trusted-publishers):
+        # * `vars.NPM_REGISTRY_SERVER` - The registry server URL, e.g. `https://registry.npmjs.org`.
+        # * `secrets.NPM_AUTH_TOKEN` - The authentication token for the registry server.
         if: ${{ env.NPM_REGISTRY_SERVER != '' || env.NPM_AUTH_TOKEN != '' }}
         env:
           ENVIRONMENT: ${{ matrix.environment }}
