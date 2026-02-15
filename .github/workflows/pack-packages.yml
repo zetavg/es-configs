@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
+      - "**"
     paths-ignore:
       - '**/README.md'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - main
+      - develop
     paths-ignore:
       - '**/README.md'
   workflow_call:
