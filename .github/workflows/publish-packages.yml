@@ -3,8 +3,12 @@ run-name: Pack and Publish ${{ github.event_name == 'release' && github.event.re
 on:
   workflow_call:
     inputs:
+      ref:
+        description: 'The git ref (tag or branch) to publish. This will not affect the actual content being published but may affect npm provenance.'
+        type: string
+        required: false
       version:
-        description: 'Version, e.g. `1.0.0` or `1.2.3-pre1`'
+        description: 'Version, e.g. `1.0.0` or `1.2.3-pre1`. This is only used for output and automatically detect if the version is a pre-release.'
         type: string
         required: true
       packed-packages-artifact-name:
@@ -34,6 +38,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 1
           sparse-checkout: |
             .github

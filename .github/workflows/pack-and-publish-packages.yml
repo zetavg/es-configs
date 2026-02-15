@@ -34,6 +34,7 @@ jobs:
       - pack
     uses: ./.github/workflows/publish-packages.yml
     with:
+      ref: ${{ github.event_name == 'release' && github.event.release.tag_name || '' }}
       version: ${{ needs.pack.outputs.version }}
       packed-packages-artifact-name: ${{ needs.pack.outputs.packed-packages-artifact-name }}
     secrets: inherit
