@@ -27,9 +27,9 @@
     "@yarnpkg/types": "^4"
   },
   "devDependencies": {
-    "@types/eslint": "^8",
+    "@types/eslint": "^9",
     "@zetavg/eslint-config": "workspace:^",
-    "eslint": "^9",
+    "eslint": "^10",
     "prettier": "^3",
     "semver": ">=7",
     "typescript": "~5.8"

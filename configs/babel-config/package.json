@@ -41,7 +41,7 @@
     "@zetavg/eslint-config": "workspace:^",
     "@zetavg/prettier-config": "workspace:^",
     "@zetavg/tsconfig": "workspace:^",
-    "eslint": "^9",
+    "eslint": "^10",
     "prettier": "^3",
     "typescript": "~5.8"
   }
