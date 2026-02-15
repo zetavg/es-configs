@@ -34,6 +34,7 @@ jobs:
       - pack
     uses: ./.github/workflows/publish-packages.yml
     with:
+      ref: ${{ github.event_name == 'release' && github.event.release.tag_name || '' }} # This is needed when the release tag is created by GitHub on publish. In this case, checkout may use the commit hash instead of the tag, which breaks npm provenance. We work around this by explicitly specifying the tag ref here.
       version: ${{ needs.pack.outputs.version }}
       packed-packages-artifact-name: ${{ needs.pack.outputs.packed-packages-artifact-name }}
     secrets: inherit
