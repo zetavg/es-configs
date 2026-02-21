@@ -3,6 +3,7 @@ export { default as general } from './general.js';
 export { default as imports } from './imports.js';
 export { default as importsSort } from './imports-sort.js';
 export { default as json } from './json.js';
+export { default as markdown } from './markdown.js';
 export { default as noUnusedVars } from './no-unused.js';
 export { default as prettier } from './prettier.js';
 export { default as react } from './react.js';
