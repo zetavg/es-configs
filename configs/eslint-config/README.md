@@ -1,14 +1,18 @@
 # ESLint Config
 
-Shared ESLint configurations.
+Shared ESLint configuration.
 
 ## Install
 
 ```bash
-yarn add @zetavg/eslint-config --dev
+pnpm add --save-dev @zetavg/eslint-config eslint prettier
 ```
 
-Then, add the following to your `eslint.config.js` (or `eslint.config.mjs`):
+```bash
+yarn add --dev @zetavg/eslint-config eslint prettier
+```
+
+Then, add the following to your `eslint.config.mjs` (or `eslint.config.js`):
 
 ```js
 import { defineConfig } from 'eslint/config';

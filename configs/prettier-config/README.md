@@ -1,11 +1,15 @@
 # Prettier Config
 
-Shared Prettier configurations.
+Shared Prettier configuration.
 
 ## Install
 
 ```bash
-yarn add @zetavg/prettier-config --dev
+pnpm add --save-dev @zetavg/prettier-config prettier
+```
+
+```bash
+yarn add --dev @zetavg/prettier-config prettier
 ```
 
 Then, add the following to your `prettier.config.mjs`:
