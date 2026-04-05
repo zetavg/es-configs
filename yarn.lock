@@ -1734,7 +1734,7 @@ __metadata:
   peerDependencies:
     eslint: ^9 || ^10
     prettier: ^3
-    typescript: ">=5.8"
+    typescript: ">=5"
   peerDependenciesMeta:
     typescript:
       optional: true
