@@ -23,5 +23,13 @@ export default defineConfig([
       'import/enforce-node-protocol-usage': 'warn',
       'import/no-unresolved': 'off', // This sometimes cannot resolve paths correctly, providing false alerts.
     },
+    settings: {
+      'import/ignore': [
+        // `eslint-plugin-import` inspects imported packages to validate exports.
+        // React Native's entry file uses Flow-only syntax, so we skip import
+        // analysis for that package.
+        'node_modules/react-native/',
+      ],
+    },
   },
 ]);
