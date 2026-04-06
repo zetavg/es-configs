@@ -5,7 +5,6 @@ import * as configs from '../configs/index.js';
 
 export default defineConfig([
   { ignores: ['dist', 'node_modules'] },
-  configs.typescript,
   configs.vitest,
   configs.json,
   configs.markdown,
@@ -19,6 +18,11 @@ export default defineConfig([
     name: 'Configs for React Files',
     files: ['**/*.[j,t]sx'],
     extends: [configs.react],
+  },
+  {
+    name: 'Configs for TypeScript Files',
+    files: ['**/*.{ts,cts,mts,tsx}'],
+    extends: [configs.typescript],
   },
   {
     name: 'Configs for CommonJS Files',
