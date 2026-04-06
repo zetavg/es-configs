@@ -6,7 +6,8 @@ import globals from 'globals';
 
 export default defineConfig([
   react.configs.flat.recommended,
-  reactHooks.configs['recommended-latest'],
+  reactHooks.configs.flat['recommended-latest'] ||
+    reactHooks.configs['recommended-latest'],
   reactRefreshPlugin.configs.recommended,
   {
     languageOptions: {
