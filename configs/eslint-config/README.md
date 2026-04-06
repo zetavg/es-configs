@@ -5,10 +5,11 @@ Shared ESLint configuration.
 ## Install
 
 ```bash
+# npm
+npm install --save-dev @zetavg/eslint-config eslint prettier
+# pnpm
 pnpm add --save-dev @zetavg/eslint-config eslint prettier
-```
-
-```bash
+# yarn
 yarn add --dev @zetavg/eslint-config eslint prettier
 ```
 

@@ -5,10 +5,11 @@ Shared Prettier configuration.
 ## Install
 
 ```bash
+# npm
+npm install --save-dev @zetavg/prettier-config prettier
+# pnpm
 pnpm add --save-dev @zetavg/prettier-config prettier
-```
-
-```bash
+# yarn
 yarn add --dev @zetavg/prettier-config prettier
 ```
 
