@@ -2,7 +2,25 @@
   "name": "@zetavg/eslint-config",
   "type": "module",
   "main": "index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "default": "./index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./globals": {
+      "default": "./exports/globals.js",
+      "types": "./dist/types/exports/globals.d.ts"
+    },
+    "./typescript-eslint": {
+      "default": "./exports/typescript-eslint.js",
+      "types": "./dist/types/exports/typescript-eslint.d.ts"
+    },
+    "./vitest": {
+      "default": "./exports/vitest.js",
+      "types": "./dist/types/exports/vitest.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/zetavg/es-configs",

@@ -1,20 +1,19 @@
-import vitest from '@vitest/eslint-plugin';
 import { defineConfig } from 'eslint/config';
-import tseslint from 'typescript-eslint';
 
 import * as configSets from '../config-sets/index.js';
 import * as configs from '../configs/index.js';
 
 export default defineConfig([
   { ignores: ['dist', 'node_modules'] },
-  tseslint.configs.recommended,
-  vitest.configs.recommended,
+  configs.typescript,
+  configs.vitest,
   configs.json,
   configs.markdown,
+  configs.defaultGlobals,
   {
     name: 'Configs Applied to All JS/TS Files',
     files: ['**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'],
-    extends: [configSets.default],
+    extends: [configSets.base],
   },
   {
     name: 'Configs for React Files',

@@ -1,5 +1,6 @@
 export { default as commonjs } from './commonjs.js';
-export { default as general } from './general.js';
+export { default as consoleAndDebugger } from './console-and-debugger.js';
+export { default as defaultGlobals } from './default-globals.js';
 export { default as imports } from './imports.js';
 export { default as importsSort } from './imports-sort.js';
 export { default as json } from './json.js';
@@ -7,4 +8,7 @@ export { default as markdown } from './markdown.js';
 export { default as noUnusedVars } from './no-unused.js';
 export { default as prettier } from './prettier.js';
 export { default as react } from './react.js';
+export { default as style } from './style.js';
 export { default as todoComments } from './todo-comments.js';
+export { default as typescript } from './typescript.js';
+export { default as vitest } from './vitest.js';

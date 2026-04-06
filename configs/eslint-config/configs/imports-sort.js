@@ -1,6 +1,11 @@
 import { defineConfig } from 'eslint/config';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
+/**
+ * Enforces a consistent import ordering convention using automatic sorting,
+ * eliminating the need to debate or manually maintain import order.
+ * Violations are reported as warnings and can be auto-fixed.
+ */
 export default defineConfig([
   {
     plugins: {
@@ -22,9 +27,7 @@ export default defineConfig([
             // Packages. `react` related packages come first.
             ['^react$', '^react/', '^react-dom', '^react', '^@?\\w'],
             // Internal packages.
-            [
-              '^(@|@zetavg|components|utils|config|vendored-lib)(/.*|$)',
-            ],
+            ['^(@|@zetavg|components|utils|config|vendored-lib)(/.*|$)'],
             // Side effect imports.
             ['^\\u0000'],
             // Parent imports. Put `..` last.
