@@ -1,5 +1,6 @@
 import json from '@eslint/json';
 import { defineConfig } from 'eslint/config';
+import * as jsoncParser from 'jsonc-eslint-parser';
 
 export default defineConfig([
   {
@@ -8,11 +9,9 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.json'],
-    ignores: [
-      '**/tsconfig.json', // tsconfig files may contain comments, which ESLint can't parse
-    ],
+    files: ['**/*.json', '**/*.jsonc', '**/*.json5'],
     language: 'json/json',
+    languageOptions: { parser: jsoncParser },
     rules: {
       'json/no-duplicate-keys': 'error',
     },
