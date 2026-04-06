@@ -2,6 +2,7 @@
   "name": "@zetavg/babel-config",
   "type": "module",
   "main": "index.js",
+  "types": "dist/types/index.d.ts",
   "bin": {
     "babel-config-default-extensions": "bin/babel-config-default-extensions.js"
   },
